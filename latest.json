@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "version": "1.0.1",
-  "url": "https://raw.githubusercontent.com/Paralied/BassForgePublic/main/releases/v1.0.1/BassForge.exe",
-  "sha256": "2f5321bb31c52ff59169cee3ddbc0b7ff656bca6594ca84c9882b4d7f2547e1b",
-  "size": 133120,
-  "notes": "Visible setup with live progress and error details. More reliable installer process handling. GitHub update checks, verified downloads, and save-before-restart support."
+  "version": "1.0.2",
+  "url": "https://raw.githubusercontent.com/Paralied/BassForgePublic/main/releases/v1.0.2/BassForge.exe",
+  "sha256": "636e6c9c90ebcc77e8359b3485f06a3b9b05591d5a7b1227f798f328892c42c2",
+  "size": 145408,
+  "notes": "Fixes invisible startup and stale already-open locks. Adds visible startup with Restart startup and Open log, cleanup after forced stops, recovery of invisible older installers, and restore-on-reopen for the studio."
 }
