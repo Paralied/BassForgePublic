@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "version": "1.0.1",
+  "url": "https://raw.githubusercontent.com/Paralied/BassForgePublic/main/releases/v1.0.1/BassForge.exe",
+  "sha256": "2f5321bb31c52ff59169cee3ddbc0b7ff656bca6594ca84c9882b4d7f2547e1b",
+  "size": 133120,
+  "notes": "Visible setup with live progress and error details. More reliable installer process handling. GitHub update checks, verified downloads, and save-before-restart support."
+}

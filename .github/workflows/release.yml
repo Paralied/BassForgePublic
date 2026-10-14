@@ -1,0 +1,46 @@
+name: Publish Windows download
+on:
+  push:
+    branches: [main]
+    paths: ['latest.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-windows
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Verify committed Windows download
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, re
+          from pathlib import Path
+          data = json.loads(Path('latest.json').read_text())
+          version = data['version']
+          assert re.fullmatch(r'\d{1,4}\.\d{1,4}\.\d{1,4}', version)
+          path = Path('releases') / ('v' + version) / 'BassForge.exe'
+          payload = path.read_bytes()
+          assert payload[:2] == b'MZ'
+          assert len(payload) == data['size']
+          assert hashlib.sha256(payload).hexdigest() == data['sha256']
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write('VERSION=' + version + '\n')
+          Path('release-notes.md').write_text(data['notes'] + '\n\nRun BassForge.exe. Setup shows live progress. Use Check for updates inside the studio for future versions.\n', encoding='utf-8')
+          PY
+      - name: Create versioned GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "This version is already published. Publish a new version for changes."
+            exit 0
+          fi
+          gh release create "v$VERSION" "releases/v$VERSION/BassForge.exe" "releases/v$VERSION/SHA256SUMS.txt" --target "$GITHUB_SHA" --title "Bass Forge $VERSION" --notes-file release-notes.md --latest
